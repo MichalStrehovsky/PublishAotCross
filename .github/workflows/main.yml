@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Hello
-          path: src/bin/Release/net8.0/linux-x64/publish/Hello
+          path: test/bin/Release/net8.0/linux-x64/publish/Hello
       - name: Build (CD)
         if: ${{ github.event.inputs.version != '' }}
         run: dotnet build -t:Pack src/PublishAotCross.nuproj -p:Version=${{ github.event.inputs.version }}
@@ -54,3 +54,15 @@ jobs:
         run: |
           git tag v${{ github.event.inputs.version }}
           git push origin v${{ github.event.inputs.version }}
+
+  validate:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    name: Try launching
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+      - name: List
+        run: ls -la
+      - name: Launch
+        run: ./Hello
