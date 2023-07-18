@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.Build.NoTargets">
+  <PropertyGroup>
+
+    <TargetFramework>netstandard2.0</TargetFramework>
+
+    <PackageId>PublishAotCross</PackageId>
+    <Version Condition="'$(Version)' == ''">42.42.42-dev</Version>
+    <Authors>Michal Strehovsky</Authors>
+    <Company>Michal Strehovsky</Company>
+    <Description>MSBuild targets to aid in crosscompiling Native AOT publishing.</Description>
+    <PackageProjectUrl>https://github.com/MichalStrehovsky/PublishAotCross</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="PublishAotCross.targets">
+      <Pack>true</Pack>
+      <PackagePath>build</PackagePath>
+    </None>
+    <None Include="Crosscompile.targets">
+      <Pack>true</Pack>
+      <PackagePath>build</PackagePath>
+    </None>
+    <None Include="clang.cmd">
+      <Pack>true</Pack>
+      <PackagePath>build</PackagePath>
+    </None>
+    <None Include="../README.md">
+      <Pack>true</Pack>
+      <PackagePath>/</PackagePath>
+    </None>
+  </ItemGroup>
+</Project>
