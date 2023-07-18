@@ -11,6 +11,9 @@ set args=%*
 rem Works around zlib not being available with zig. This is not great.
 set args=%args:-lz =%
 
+rem Work around a .NET 8 Preview 6 issue
+set args=%args:'-Wl,-rpath,$ORIGIN'=-Wl,-rpath,$ORIGIN%
+
 rem Work around parameters unsupported by zig. Just drop them from the command line.
 set args=%args:--discard-all=--as-needed%
 set args=%args:-Wl,-pie =%
