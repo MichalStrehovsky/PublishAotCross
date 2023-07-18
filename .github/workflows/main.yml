@@ -63,4 +63,6 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v3
       - name: Launch
-        run: ./Hello/Hello
+        run: |
+          chmod +x ./Hello/Hello
+          ./Hello/Hello
