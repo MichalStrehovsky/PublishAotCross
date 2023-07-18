@@ -62,7 +62,5 @@ jobs:
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v3
-      - name: List
-        run: ls -la
       - name: Launch
-        run: ./Hello
+        run: ./Hello/Hello
