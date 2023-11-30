@@ -10,7 +10,8 @@
     <PackageReference Include="Vezel.Zig.Toolsets.$(HostRuntimeIdentifier)"
       Version="$(ZigVersion)"
       PrivateAssets="all"
-      IsImplicitlyDefined="true" />
+      IsImplicitlyDefined="true"
+      Condition="'$(ZigPath)'==''" />
   </ItemGroup>
 
   <UsingTask TaskName="PrependPath"
@@ -41,20 +42,20 @@
   </Target>
 
   <Choose>
-    <When Condition="$(HostRuntimeIdentifier.StartsWith('win-'))">
+    <When Condition="$(HostRuntimeIdentifier.StartsWith('win-')) and '$(ZigPath)'==''">
       <PropertyGroup>
-        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x86'))">$(PkgVezel_Zig_Toolsets_win-x86)</ZigPath>
-        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x64'))">$(PkgVezel_Zig_Toolsets_win-x64)</ZigPath>
-        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm64'))">$(PkgVezel_Zig_Toolsets_win-arm64)</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x86'))">$(PkgVezel_Zig_Toolsets_win-x86)/tools</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x64'))">$(PkgVezel_Zig_Toolsets_win-x64)/tools</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm64'))">$(PkgVezel_Zig_Toolsets_win-arm64)/tools</ZigPath>
       </PropertyGroup>
     </When>
-    <When Condition="$(HostRuntimeIdentifier.StartsWith('linux-'))">
+    <When Condition="$(HostRuntimeIdentifier.StartsWith('linux-')) and '$(ZigPath)'==''">
       <PropertyGroup>
-        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x64'))">$(PkgVezel_Zig_Toolsets_linux-x64)</ZigPath>
-        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm'))">$(PkgVezel_Zig_Toolsets_linux-arm)</ZigPath>
-        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm64'))">$(PkgVezel_Zig_Toolsets_linux-arm64)</ZigPath>
-        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-ppc64le'))">$(PkgVezel_Zig_Toolsets_linux-ppc64le)</ZigPath>
-        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-riscv64'))">$(PkgVezel_Zig_Toolsets_linux-riscv64)</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x64'))">$(PkgVezel_Zig_Toolsets_linux-x64)/tools</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm'))">$(PkgVezel_Zig_Toolsets_linux-arm)/tools</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm64'))">$(PkgVezel_Zig_Toolsets_linux-arm64)/tools</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-ppc64le'))">$(PkgVezel_Zig_Toolsets_linux-ppc64le)/tools</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-riscv64'))">$(PkgVezel_Zig_Toolsets_linux-riscv64)/tools</ZigPath>
       </PropertyGroup>
     </When>
   </Choose>
@@ -62,7 +63,7 @@
   <Target Name="SetPathToZig"
           BeforeTargets="SetupOSSpecificProps">
 
-    <PrependPath Value="$(ZigPath)/tools" />
+    <PrependPath Value="$(ZigPath)" />
 
   </Target>
 
