@@ -2,7 +2,16 @@
 
   <PropertyGroup>
     <DisableUnsupportedError>true</DisableUnsupportedError>
+    <HostRuntimeIdentifier>$(NETCoreSdkPortableRuntimeIdentifier)</HostRuntimeIdentifier>
+    <ZigVersion Condition="'$(ZigVersion)' == ''">0.11.0.1</ZigVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Vezel.Zig.Toolsets.$(HostRuntimeIdentifier)"
+      Version="$(ZigVersion)"
+      PrivateAssets="all"
+      IsImplicitlyDefined="true" />
+  </ItemGroup>
 
   <UsingTask TaskName="PrependPath"
              TaskFactory="RoslynCodeTaskFactory"
@@ -28,6 +37,32 @@
           BeforeTargets="SetupOSSpecificProps">
 
     <PrependPath Value="$(MSBuildThisFileDirectory)" />
+
+  </Target>
+
+  <Choose>
+    <When Condition="$(HostRuntimeIdentifier.StartsWith('win-'))">
+      <PropertyGroup>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x86'))">$(PkgVezel_Zig_Toolsets_win-x86)</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x64'))">$(PkgVezel_Zig_Toolsets_win-x64)</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm64'))">$(PkgVezel_Zig_Toolsets_win-arm64)</ZigPath>
+      </PropertyGroup>
+    </When>
+    <When Condition="$(HostRuntimeIdentifier.StartsWith('linux-'))">
+      <PropertyGroup>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x64'))">$(PkgVezel_Zig_Toolsets_linux-x64)</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm'))">$(PkgVezel_Zig_Toolsets_linux-arm)</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm64'))">$(PkgVezel_Zig_Toolsets_linux-arm64)</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-ppc64le'))">$(PkgVezel_Zig_Toolsets_linux-ppc64le)</ZigPath>
+        <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-riscv64'))">$(PkgVezel_Zig_Toolsets_linux-riscv64)</ZigPath>
+      </PropertyGroup>
+    </When>
+  </Choose>
+
+  <Target Name="SetPathToZig"
+          BeforeTargets="SetupOSSpecificProps">
+
+    <PrependPath Value="$(ZigPath)/tools" />
 
   </Target>
 
