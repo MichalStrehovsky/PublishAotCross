@@ -4,6 +4,7 @@
     <DisableUnsupportedError>true</DisableUnsupportedError>
     <HostRuntimeIdentifier Condition="'$(HostRuntimeIdentifier)'==''">$(NETCoreSdkPortableRuntimeIdentifier)</HostRuntimeIdentifier>
     <ZigVersion Condition="'$(ZigVersion)' == ''">0.11.0.1</ZigVersion>
+    <UseExternalZig>false</UseExternalZig>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +13,7 @@
       PrivateAssets="all"
       IsImplicitlyDefined="true"
       GeneratePathProperty="true"
-      Condition="'$(ZigPath)'==''" />
+      Condition="'$(UseExternalZig)'=='false'" />
   </ItemGroup>
 
   <UsingTask TaskName="PrependPath"
@@ -45,13 +46,13 @@
   <Target Name="SetPathToZig"
           BeforeTargets="SetupOSSpecificProps">
 
-    <PropertyGroup Condition="$(HostRuntimeIdentifier.StartsWith('win-')) and '$(ZigPath)'==''">
+    <PropertyGroup Condition="$(HostRuntimeIdentifier.StartsWith('win-'))">
       <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x86'))">$(PkgVezel_Zig_Toolsets_win-x86)/tools</ZigPath>
       <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x64'))">$(PkgVezel_Zig_Toolsets_win-x64)/tools</ZigPath>
       <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm64'))">$(PkgVezel_Zig_Toolsets_win-arm64)/tools</ZigPath>
     </PropertyGroup>
 
-    <PropertyGroup Condition="$(HostRuntimeIdentifier.StartsWith('linux-')) and '$(ZigPath)'==''">
+    <PropertyGroup Condition="$(HostRuntimeIdentifier.StartsWith('linux-'))">
       <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x64'))">$(PkgVezel_Zig_Toolsets_linux-x64)/tools</ZigPath>
       <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm'))">$(PkgVezel_Zig_Toolsets_linux-arm)/tools</ZigPath>
       <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm64'))">$(PkgVezel_Zig_Toolsets_linux-arm64)/tools</ZigPath>
@@ -59,12 +60,12 @@
       <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-riscv64'))">$(PkgVezel_Zig_Toolsets_linux-riscv64)/tools</ZigPath>
     </PropertyGroup>
 
-    <PropertyGroup Condition="$(HostRuntimeIdentifier.StartsWith('osx-')) and '$(ZigPath)'==''">
+    <PropertyGroup Condition="$(HostRuntimeIdentifier.StartsWith('osx-'))">
       <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x64'))">$(PkgVezel_Zig_Toolsets_osx-x64)/tools</ZigPath>
       <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm64'))">$(PkgVezel_Zig_Toolsets_osx-arm64)/tools</ZigPath>
     </PropertyGroup>
 
-    <PrependPath Value="$(ZigPath)" />
+    <PrependPath Condition="'$(UseExternalZig)'=='false'" Value="$(ZigPath)" />
 
   </Target>
 
