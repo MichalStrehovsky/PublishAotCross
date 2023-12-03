@@ -4,7 +4,7 @@
     <DisableUnsupportedError>true</DisableUnsupportedError>
     <HostRuntimeIdentifier Condition="'$(HostRuntimeIdentifier)'==''">$(NETCoreSdkPortableRuntimeIdentifier)</HostRuntimeIdentifier>
     <ZigVersion Condition="'$(ZigVersion)' == ''">0.11.0.1</ZigVersion>
-    <UseExternalZig>false</UseExternalZig>
+    <UseExternalZig Condition="'$(UseExternalZig)' == ''">false</UseExternalZig>
   </PropertyGroup>
 
   <ItemGroup>
