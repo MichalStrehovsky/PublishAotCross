@@ -13,7 +13,7 @@
       PrivateAssets="all"
       IsImplicitlyDefined="true"
       GeneratePathProperty="true"
-      Condition="'$(UseExternalZig)'=='false'" />
+      Condition="'$(UseExternalZig)' == 'false'" />
   </ItemGroup>
 
   <UsingTask TaskName="PrependPath"
@@ -52,7 +52,7 @@
       <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm64'))">$(PkgVezel_Zig_Toolsets_win-arm64)/tools</ZigPath>
     </PropertyGroup>
 
-    <PrependPath Condition="'$(UseExternalZig)'=='false'" Value="$(ZigPath)" />
+    <PrependPath Condition="'$(UseExternalZig)' == 'false'" Value="$(ZigPath)" />
 
   </Target>
 
