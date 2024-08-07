@@ -2,7 +2,19 @@
 
   <PropertyGroup>
     <DisableUnsupportedError>true</DisableUnsupportedError>
+    <HostRuntimeIdentifier Condition="'$(HostRuntimeIdentifier)' == ''">$(NETCoreSdkPortableRuntimeIdentifier)</HostRuntimeIdentifier>
+    <ZigVersion Condition="'$(ZigVersion)' == ''">0.11.0.1</ZigVersion>
+    <UseExternalZig Condition="'$(UseExternalZig)' == ''">false</UseExternalZig>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Vezel.Zig.Toolsets.$(HostRuntimeIdentifier)"
+      Version="$(ZigVersion)"
+      PrivateAssets="all"
+      IsImplicitlyDefined="true"
+      GeneratePathProperty="true"
+      Condition="'$(UseExternalZig)' == 'false'" />
+  </ItemGroup>
 
   <UsingTask TaskName="PrependPath"
              TaskFactory="RoslynCodeTaskFactory"
@@ -28,6 +40,19 @@
           BeforeTargets="SetupOSSpecificProps">
 
     <PrependPath Value="$(MSBuildThisFileDirectory)" />
+
+  </Target>
+
+  <Target Name="SetPathToZig"
+          BeforeTargets="SetupOSSpecificProps">
+
+    <PropertyGroup Condition="$(HostRuntimeIdentifier.StartsWith('win-'))">
+      <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x86'))">$(PkgVezel_Zig_Toolsets_win-x86)/tools</ZigPath>
+      <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-x64'))">$(PkgVezel_Zig_Toolsets_win-x64)/tools</ZigPath>
+      <ZigPath Condition="$(HostRuntimeIdentifier.EndsWith('-arm64'))">$(PkgVezel_Zig_Toolsets_win-arm64)/tools</ZigPath>
+    </PropertyGroup>
+
+    <PrependPath Condition="'$(UseExternalZig)' == 'false'" Value="$(ZigPath)" />
 
   </Target>
 
