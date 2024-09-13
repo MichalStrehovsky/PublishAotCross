@@ -43,10 +43,13 @@
       <CrossCompileArch />
       <CrossCompileArch Condition="$(CrossCompileRid.EndsWith('-x64'))">x86_64</CrossCompileArch>
       <CrossCompileArch Condition="$(CrossCompileRid.EndsWith('-arm64'))">aarch64</CrossCompileArch>
+      <CrossCompileArch Condition="$(CrossCompileRid.EndsWith('-arm'))">arm</CrossCompileArch>
 
       <TargetTriple />
       <TargetTriple Condition="'$(CrossCompileArch)' != ''">$(CrossCompileArch)-linux-gnu</TargetTriple>
-      <TargetTriple Condition="'$(CrossCompileArch)' != '' and ($(CrossCompileRid.StartsWith('linux-musl')) or $(CrossCompileRid.StartsWith('alpine')))">$(CrossCompileArch)-linux-musl</TargetTriple>
+      <TargetTriple Condition="'$(CrossCompileArch)' == 'arm' and !$(CrossCompileRid.StartsWith('linux-musl'))">thumb-linux-gnueabihf</TargetTriple>
+      <TargetTriple Condition="'$(CrossCompileArch)' == 'arm' and  $(CrossCompileRid.StartsWith('linux-musl'))">thumb-linux-musleabihf</TargetTriple>
+      <TargetTriple Condition="'$(CrossCompileArch)' != '' and '$(CrossCompileArch)' != 'arm' and ($(CrossCompileRid.StartsWith('linux-musl')) or $(CrossCompileRid.StartsWith('alpine')))">$(CrossCompileArch)-linux-musl</TargetTriple>
     </PropertyGroup>
 
     <ItemGroup>
